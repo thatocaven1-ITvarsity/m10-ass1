@@ -1,0 +1,85 @@
+
+<html>
+    <head>
+       
+    </head>
+        <body>
+            <button id="getData">Get data</button>
+             <button id="getlist">Get list</button>
+            <br/><br/>
+            
+            <form  id="myform">
+            <input type="text" name="firstname" id="firstname"   value="firstname" />
+              <input type="text" name="lastname"   id="lastname" value="lastname" /><br/>
+            <button id="submitform">Submit</button>
+            </form>
+            
+            <p id="posts"></p>
+            <p id="message"></p>
+            <p id="greeting"></p>
+            
+            <script>
+                document.getElementById("getData").addEventListener('click',getData);
+                document.getElementById("getlist").addEventListener('click',getlist);
+               document.getElementById("submitform").addEventListener('click',submitform);
+                
+                function getData(){
+                    console.log("fuction getData has  been  called");
+                    fetch('https://mysite.itvarsity.org/api/fetch/get-data/').then(function(response){
+                        return response.text();
+                    })
+                    .then(function(data){
+                        document.getElementById("message").innerHTML = data;
+                    })
+                }
+               function getlist(){
+                   fetch('https://mysite.itvarsity.org/api/fetch/get-list/').then(function(response){
+                       return response.json();
+                   })
+                   .then(function(data){
+                       var output = "<h1>Posts</h1>";
+                       for(a =0; a < data.length; a++){
+                           output +=
+                              `
+                                  <ul>
+                           <li><h2>${data[a][0]}</h2></li>
+                            <li><b>${data[a][1]}</b></li>
+                              <li>${data[a][2]}</li>
+
+                                    </ul>
+                                       `
+                       }
+                       document.getElementById("posts").innerHTML = output;
+                   })
+               }
+                function submitform(e){
+                    e.preventDefault();
+                    form = new FormData(document.querySelector("#myform"));
+                      fetch('https://mysite.itvarsity.org/api/fetch/send-data/',{
+                          method: 'POST',
+                          headers: {'Accept': 'application/json,*/*'}, 
+                           body: form
+                       })
+                      .then(function(response){
+                        return response.text();
+                    }) 
+                   .then(function(data){
+                    document.getElementById("greeting").innerHTML = data;
+                    })                     
+                }
+            </script>
+        </body>
+    
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
